@@ -1,2 +1,1 @@
-This is my ITM 352 repo. Hey this is cool!
-Why, yes it is!
+This is my ITM 352 repo. How exciting! Now I changed it again.
