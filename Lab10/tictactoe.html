@@ -1,0 +1,17 @@
+
+<style>
+    td:hover {background-color: chartreuse;}
+</style>
+<table border="1">
+    <tbody>
+<script>
+    tictactoe = [["X","O","O"],["O","X","O"],["O","O","X"]];
+for(row in tictactoe) {
+    document.write(`<tr>`);
+    for(col in tictactoe[row]) {
+        document.write(`<td>${tictactoe[row][col]}</td>`);
+    }
+    document.write(`</tr>`);
+}
+</script>
+  </tbody></table>
