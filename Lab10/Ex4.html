@@ -1,4 +1,13 @@
 
+    <style>
+      tr {
+        border: 1px solid black;
+      }
+
+      td {
+        border: 1px solid black;
+      }
+    </style>
     <script> 
     var product_quantities = [0,2,3,4,5];
     // array of all products
@@ -13,14 +22,13 @@
     ];
     
         document.write(`
-        <table style="border: 1px solid black;text-align: center;" onclick="
-        this.appendChild(document.createElement('tr'));
-        ">
-    <tbody><tr style="border: 1px solid black;"><th style="border: 1px solid black;">Product Name</th><th>Price</th></tr>
+        <table style="border: 1px solid black;text-align: center;" onclick="this.appendChild(document.createElement('tr'));" >
+    <tbody>
+        <tr><th style="border: 1px solid black;">Product Name</th><th>Price</th></tr>
         `);
         for(let prodObj of products) {
           document.write(`
-    <tr style="border: 1px solid black;"><td style="border: 1px solid black;">${prodObj.name}</td><td>${prodObj.price}</td></tr>
+    <tr><td">${prodObj.name}</td><td>${prodObj.price}</td></tr>
           `);
         }
         document.write(`</tbody></table>`);
