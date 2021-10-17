@@ -1,0 +1,97 @@
+<style>
+    td:hover {
+        background-color: chartreuse;
+    }
+
+    td {
+        height: 25px;
+        width: 20px;
+        text-align: center;
+        cursor: cell;
+    }
+</style>
+<table border="1">
+    <tbody id="board_tbody">
+        <script>
+            function check_win(board_array_str) {
+                const re = /^(?:(?:...){0,2}([OX])\1\1|.{0,2}([OX])..\2..\2|([OX])...\3...\3|..([OX]).\4.\4)/g;
+                return re.exec(board_array_str);
+            }
+            function winning_moves(play_board_flat, move_mark) {
+                var moves = { no_win: [], winning: [] };
+                console.log(move_mark);
+                for (let pos in play_board_flat) {
+                    if (play_board_flat[pos] != "-") continue;
+                    play_board_flat[pos] = move_mark;
+                    if (check_win(play_board_flat.join('')) != null) {
+                        moves.winning.push(pos);
+                    } else {
+                        moves.no_win.push(pos);
+                    }
+                    play_board_flat[pos] = "-";
+                }
+                return moves;
+            }
+
+            function make_move() {
+                // find best move
+                var possible_moves = winning_moves(tictactoe.flat(), marks[(move_num) % 2]);
+                var mark;
+                ++move_num;
+                mark = marks[(move_num -1) % 2];
+                // Take a winning move if there
+                if (possible_moves.winning.length != 0) {
+                    p = possible_moves.winning.pop();
+                    win_div.innerHTML = (mark + ' wins in ' + move_num + ' moves!');
+                } 
+                // no winning move
+                else {
+                    // is there a winning move for opponent? If so, block it.
+                    let opponent_moves = winning_moves(tictactoe.flat(), marks[(move_num) % 2]);
+                    if(opponent_moves.winning.length != 0) {
+                        p = opponent_moves.winning.pop();
+                    } else {
+                        console.log(possible_moves.no_win);
+                        if(possible_moves.no_win.includes('4')) {
+                            p = 4;
+                        } else {
+                                                    p = possible_moves.no_win.pop();
+                        }
+                    }
+                }
+                var r = parseInt(p / 3);
+                var c = p - 3 * r;
+                tictactoe[r][c] =  mark;
+                board_tbody.rows[r].cells[c].innerHTML = mark;
+            }
+
+
+            var marks = ["X", "O"];
+            var move_num = 0;
+            var tictactoe = [["-", "-", "-"], ["-", "-", "-"], ["-", "-", "-"]];
+
+            for (let row in tictactoe) {
+                document.write(`<tr>`);
+                for (let col in tictactoe[row]) {
+                    document.write(`<td " 
+            onclick="
+            if(this.innerHTML == '-') {
+                ++move_num;
+                tictactoe[${row}][${col}]=marks[(move_num-1)%2];
+                this.innerHTML=tictactoe[${row}][${col}];
+                win = check_win(tictactoe.flat().join(''));
+               if(win != null) {win.shift(); win_div.innerHTML = (win.join('') + ' wins in ' + move_num + ' moves!');}
+               else if(move_num == 9) {win_div.innerHTML = 'Cats Game!';}
+               else {
+                make_move();
+               }
+            }
+                "
+            >${tictactoe[row][col]}</td>`);
+                }
+                document.write(`</tr>`);
+            }
+        </script>
+    </tbody>
+</table>
+<div id="win_div">X goes first</div>
