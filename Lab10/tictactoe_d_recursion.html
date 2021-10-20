@@ -40,36 +40,42 @@
                 var r;
                 var c;
                 ++move_num;
-                mark = marks[(move_num - 1) % 2];
+                mark = marks[(move_num -1) % 2];
                 // Take a winning move if there is one
                 if (possible_moves.winning.length != 0) {
                     p = possible_moves.winning.pop();
                     win_div.innerHTML = (mark + ' wins in ' + move_num + ' moves!');
-                }
-                // no winning move, look for best move
+                } 
+                // no winning move, look for winning move eventually
                 else {
+                    let next_move_num = move_num;
+                    
+                    while(possible_moves.no_win.length > 0) {
+                        p = possible_moves.no_win.pop();
+                        r = parseInt(p / 3);
+                        c = p - 3 * r;
+                        test_playboard[p] = marks[(next_move_num -1) % 2];
+                        ++next_move_num;
+                        let next_moves = winning_moves(test_playboard, marks[(next_move_num) % 2]),marks[(next_move_num) % 2]);
+                        if(next_moves.winning.length > 0) {
+
+                        }
+                    }
+                    /*
                     // is there a winning move for opponent? If so, block it.
                     let opponent_moves = winning_moves(tictactoe.flat(), marks[(move_num) % 2]);
-                    if (opponent_moves.winning.length != 0) {
+                    if(opponent_moves.winning.length != 0) {
                         p = opponent_moves.winning.pop();
+                    } else {
+                        if(possible_moves.no_win.includes('4')) {
+                            p = 4;
+                        } else {
+                                                    p = possible_moves.no_win.pop();
+                        }
                     }
-                    // Take the center if it's available, it gives the most possible win opportunities and most blockage
-                    else if (possible_moves.no_win.includes('4')) {
-                        p = 4;
-                    }
-                    // Next best move is a corner
-                    else if ( (corners = possible_moves.no_win.join('').match(/[0268]/)) != null ) {
-                        console.log(possible_moves.no_win[corners.index]);
-                        p = possible_moves.no_win[corners.index];
-                    }
-                    // Only middles left, doesn't matter which one
-                    else { 
-                        p = possible_moves.no_win.pop();
-                    }
+                    */
                 }
-                r = parseInt(p / 3);
-                c = p - 3 * r;
-                tictactoe[r][c] = mark;
+                tictactoe[r][c] =  mark;
                 board_tbody.rows[r].cells[c].innerHTML = mark;
             }
 
