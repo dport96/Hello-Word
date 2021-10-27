@@ -1,4 +1,4 @@
-function isNonNegInt(q, callBack = console.log) {
+function isNonNegInt(q) {
     // q is a callback fun
     errors = []; // assume no errors at first
     if (Number(q) != q) errors.push('Not a number!'); // Check if string is a number value
@@ -8,6 +8,11 @@ function isNonNegInt(q, callBack = console.log) {
     return (errors.length == 0);
 }
 
+attributes  =  "Dan;55;55.5;-54.5";
+peices = attributes.split(';');
 
-isNonNegInt("-1.23");
-isNonNegInt("-1");
+peices.forEach(
+    (item, index) => {
+    console.log(`part ${index} is ${(isNonNegInt(item)?'a':'not a')} quantity`);
+    }
+);
