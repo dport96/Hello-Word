@@ -14,3 +14,5 @@ step10 = step9 % 7;
 
 
 console.log(step10);
+
+
