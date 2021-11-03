@@ -9,10 +9,10 @@ function isNonNegInt(q) {
 }
 
 attributes  =  "Dan;55;55.5;-54.5";
-peices = attributes.split(';');
+pieces = attributes.split(';');
 
-peices.forEach(
+pieces.forEach(
     (item, index) => {
-    console.log(`part ${index} is ${(isNonNegInt(item)?'a':'not a')} quantity`);
+    console.log(`part ${index}:${item} is ${(isNonNegInt(item)?'a':'not a')} quantity`);
     }
 );
