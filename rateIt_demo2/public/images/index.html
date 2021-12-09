@@ -1,0 +1,131 @@
+<?php
+//Author: Kaci Shimabuku
+//Received help from Dan Port. 
+?>
+<head>
+<link rel="stylesheet" type="text/css" href="stars.css">
+</head>
+
+<script>
+
+function Star_rate(rate)
+            {
+          
+//As per the value of rate parameter, mark respective radio button as “checked”
+                    btn = document.getElementById("star_" + rate);
+                    btn.checked = true;
+//display correct rate stars images
+                    var star = document.getElementById("star" + rate).className;
+                  
+                    if (star == "empty_star")   //if an empty star is clicked, rating is done till that star
+            {
+            for (i = rate; i > 0; i--)
+            {
+            document.getElementById("star" + i).className = "full_star";
+            }
+            }
+            else if (star == "full_star") //if a full star is clicked, rating is reduced to that star
+            {
+            for (i = rate; i <= 5; i++)
+            {
+            document.getElementById("star" + (i + 1)).className = "empty_star";
+            }
+            }
+            }
+
+
+function add_review($rev_file, $rev_info_array) {
+    $fp = fopen($rev_file,'a+');
+    $enc_rev_array = serialize($rev_info_array);
+    fputs($fp, $enc_rev_array . "\n");
+    fclose($fp);
+}
+
+function display_reviews($rev_file) {
+    $fp = fopen($rev_file, 'r+');
+    while(!feof($fp)) {
+        $enc_rev_array = fgets($fp);
+        $rev_array = unserialize(trim($enc_rev_array));
+        if(!empty($rev_array)) {
+            // print out all info in array
+            foreach($rev_array as $key=>$value) {
+                if($value =='') $value = '<b>Not Available</b>';
+                print $key . ':' .$value . ' ';
+            }
+            // done so new line for next review
+            print '<br><br>';
+        }
+        
+    }
+    fclose($fp);
+}
+
+</script>
+
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" name="review_form">
+
+    <div class="rating">
+        <h4>Please Rate Our Spa Service</h4>
+            <div class="rate_widget">    
+<script>
+for (i = rate; i <= 5; i++) {
+   document.write(`
+<div class="empty_star" onClick="Star_rate(${i})" id="star${i}"></div>
+<input type="radio" name="star" id="star_${i}" value="${i}" style="display:none"> 
+`);
+}
+</script>
+        </div>
+        <br class = "spacer">
+    </div>
+
+    <h4>Your Review</h4>
+    <label>Service Received</label>
+    <input type = "text" name = "Service Received" id = "review_title">
+    <label>Enter Your Name </label>
+    <input type = "text" name = "Reviewer Name" id = "reviewer_name" ><br><br>
+    <label>Enter Comments</label><br>
+    <textarea name = "Comments" rows="20" cols="100"></textarea><br><br>
+    <input  type = "submit" value = "Submit Review" name = "submit_review" id = "submit_review">
+</form>
+
+
+
+
+
+
+        <table>
+            <tbody>
+
+            <table border="1">
+                <tbody>
+                   
+                <td style="text-align: center;"><b><big>Rating</big></b></td>
+                <td style="text-align: center;"><b><big>Name Entered</big></b></td>
+                <td style="text-align: center;"><b><big>Service Received</big></b></td>
+                <td style="text-align: center;"><b><big>Comment</big></b></td>
+                <td style="text-align: center;"><b><big>Date and Time</big></b></td>
+  <?php
+
+$review_file = './spa_reviews.dat';
+
+if(array_key_exists('submit_review', $_POST)){
+    
+    $user_review_info = $_POST;
+    // get rid of submit button key
+    unset($user_review_info['submit_review']);
+    // add time stamp to review info - use to id and order by date
+   
+    $user_review_info['timestamp'] = time();
+    date_default_timezone_set('Pacific/Honolulu');
+    //makes time stamp readable 
+    echo date('l jS \of F Y h:i:s A');
+    
+    add_review($review_file, $user_review_info);
+    
+}
+
+// display the reviews
+ display_reviews($review_file);
+
+?>
